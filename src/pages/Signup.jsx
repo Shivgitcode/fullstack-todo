@@ -1,25 +1,80 @@
+import { useState } from "react";
+import { FaRegEye } from "react-icons/fa6";
+import { FaRegEyeSlash } from "react-icons/fa";
 export default function Login() {
+  const [user, setUser] = useState({ username: "", email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(true);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch("http//:localhost:4000/todo", {
+      method: "POST",
+      headers: [
+        {
+          "Content-Type": "application/json",
+        },
+      ],
+      body: JSON.stringify(user),
+    });
+    console.log(response);
+  };
+
+  const handleForm = async (e) => {
+    setUser((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen bg-[#222222]">
       <div className="form-container mb-[120px]">
         <p className="title">Register</p>
-        <form className="form">
+        <form className="form" onSubmit={handleSubmit}>
           <div className="input-group">
             <label htmlFor="username">Username</label>
-            <input type="text" name="username" id="username" placeholder="" />
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder=""
+              value={user.username}
+              onChange={handleForm}
+            />
           </div>
           <div className="input-group">
             <label htmlFor="email">Email</label>
-            <input type="email" name="email" id="email" placeholder="" />
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder=""
+              value={user.email}
+              onChange={handleForm}
+            />
           </div>
           <div className="input-group">
             <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder=""
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "password" : "text"}
+                name="password"
+                id="password"
+                placeholder=""
+                onChange={handleForm}
+                value={user.password}
+              />
+              <button
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-[15px] top-[15px]"
+              >
+                {showPassword ? (
+                  <FaRegEye fontSize={15}></FaRegEye>
+                ) : (
+                  <FaRegEyeSlash fontSize={15}></FaRegEyeSlash>
+                )}
+              </button>
+            </div>
+
             <div className="forgot">
               <a rel="noopener noreferrer" href="#">
                 Forgot Password ?
