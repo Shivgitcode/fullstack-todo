@@ -7,14 +7,6 @@ import Todo from "./pages/Todo";
 import { useEffect } from "react";
 
 function App() {
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("http://localhost:4000/todo");
-      const data = await response.json();
-      console.log(data);
-    };
-    fetchData();
-  }, []);
   return (
     <div className=" font-sora">
       <Routes>

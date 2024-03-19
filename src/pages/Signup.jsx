@@ -1,22 +1,30 @@
 import { useState } from "react";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [user, setUser] = useState({ username: "", email: "", password: "" });
   const [showPassword, setShowPassword] = useState(true);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http//:localhost:4000/todo", {
+    const response = await fetch("http://localhost:4000/register", {
       method: "POST",
-      headers: [
-        {
-          "Content-Type": "application/json",
-        },
-      ],
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
       body: JSON.stringify(user),
     });
-    console.log(response);
+    // console.log(response);
+    if (response.ok) {
+      setUser({ username: "", email: "", password: "" });
+      navigate("/login");
+    } else {
+      <div></div>;
+    }
   };
 
   const handleForm = async (e) => {
@@ -63,16 +71,16 @@ export default function Login() {
                 onChange={handleForm}
                 value={user.password}
               />
-              <button
+              <div
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-[15px] top-[15px]"
+                className="absolute right-[15px] top-[15px] cursor-pointer"
               >
                 {showPassword ? (
                   <FaRegEye fontSize={15}></FaRegEye>
                 ) : (
                   <FaRegEyeSlash fontSize={15}></FaRegEyeSlash>
                 )}
-              </button>
+              </div>
             </div>
 
             <div className="forgot">
