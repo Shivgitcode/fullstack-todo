@@ -2,6 +2,8 @@ import { useState } from "react";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import toast from "react-hot-toast";
 export default function Login() {
   const [user, setUser] = useState({ username: "", email: "", password: "" });
   const [showPassword, setShowPassword] = useState(true);
@@ -9,8 +11,10 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = Cookies.get("jwt");
     const response = await fetch("http://localhost:4000/register", {
       method: "POST",
+      credentials: "same-origin",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
@@ -18,8 +22,12 @@ export default function Login() {
 
       body: JSON.stringify(user),
     });
-    // console.log(response);
+
     if (response.ok) {
+      const res_data = await response.json();
+      toast.success("Successfully registered");
+
+      console.log(res_data);
       setUser({ username: "", email: "", password: "" });
       navigate("/login");
     } else {

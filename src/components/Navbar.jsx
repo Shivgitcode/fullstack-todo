@@ -1,7 +1,18 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppProvider";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const { isAuth } = useContext(AppContext);
+
+  const handleRoutes = async () => {
+    if (isAuth) {
+      navigate("/todo");
+    } else {
+      navigate("/login");
+    }
+  };
   return (
     <div className="w-full bg-[#222222]">
       <nav className="text-white mx-auto  w-[50%] flex justify-between items-center py-[20px]">
@@ -10,7 +21,7 @@ export default function Navbar() {
           <li>
             <button
               className="border-[1px] py-[6px] px-[1rem] rounded-md text-[#999999] border-[#999999] hover:text-white hover:border-white transition-all duration-100"
-              onClick={() => navigate("/todo")}
+              onClick={() => handleRoutes()}
             >
               Get Started
             </button>

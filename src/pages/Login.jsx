@@ -1,14 +1,57 @@
 import React from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useContext } from "react";
+import { AppContext } from "../context/AppProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const [authUser, setAuthUser] = useState({ username: "", password: "" });
+  const navigate = useNavigate();
+  const handleForm = (e) => {
+    setAuthUser((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+    console.log(authUser);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch("http://localhost:4000/login", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(authUser),
+    });
+    console.log(response);
+    if (response.ok) {
+      toast.success("Logged In Successfully");
+      navigate("/todo");
+    } else {
+      toast.error("wrong credentials", {
+        duration: 4000,
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen bg-[#222222]">
       <div className="form-container mb-[120px]">
         <p className="title">Login</p>
-        <form className="form">
+        <form className="form" onSubmit={handleSubmit}>
           <div className="input-group">
             <label htmlFor="username">Username</label>
-            <input type="text" name="username" id="username" placeholder="" />
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder=""
+              value={authUser.username}
+              onChange={handleForm}
+            />
           </div>
           <div className="input-group">
             <label htmlFor="password">Password</label>
@@ -16,6 +59,8 @@ export default function Login() {
               type="password"
               name="password"
               id="password"
+              value={authUser.password}
+              onChange={handleForm}
               placeholder=""
             />
             <div className="forgot">
@@ -29,7 +74,7 @@ export default function Login() {
 
         <p className="signup mt-[20px]">
           Don't have an account?
-          <a rel="noopener noreferrer" href="#" className="">
+          <a rel="noopener noreferrer" href="/signup" className="">
             Sign up
           </a>
         </p>
