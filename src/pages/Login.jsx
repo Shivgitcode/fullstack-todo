@@ -5,10 +5,14 @@ import toast from "react-hot-toast";
 import { useContext } from "react";
 import { AppContext } from "../context/AppProvider";
 import { useNavigate } from "react-router-dom";
+import { FaRegEye } from "react-icons/fa6";
+import { FaRegEyeSlash } from "react-icons/fa";
 import Cookies from "js-cookie";
 
 export default function Login() {
   const [authUser, setAuthUser] = useState({ username: "", password: "" });
+  const [showPassword, setShowPassword] = useState(true);
+
   const navigate = useNavigate();
   const handleForm = (e) => {
     setAuthUser((prev) => {
@@ -62,14 +66,26 @@ export default function Login() {
           </div>
           <div className="input-group">
             <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              value={authUser.password}
-              onChange={handleForm}
-              placeholder=""
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "password" : "text"}
+                name="password"
+                id="password"
+                placeholder=""
+                onChange={handleForm}
+                value={authUser.password}
+              />
+              <div
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-[15px] top-[15px] cursor-pointer"
+              >
+                {showPassword ? (
+                  <FaRegEye fontSize={15}></FaRegEye>
+                ) : (
+                  <FaRegEyeSlash fontSize={15}></FaRegEyeSlash>
+                )}
+              </div>
+            </div>
             <div className="forgot">
               <a rel="noopener noreferrer" href="#">
                 Forgot Password ?
