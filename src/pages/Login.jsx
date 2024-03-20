@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useContext } from "react";
 import { AppContext } from "../context/AppProvider";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const [authUser, setAuthUser] = useState({ username: "", password: "" });
@@ -28,12 +29,18 @@ export default function Login() {
     });
     console.log(response);
     if (response.ok) {
-      toast.success("Logged In Successfully");
+      const res_data = await response.json();
+      localStorage.setItem("jwt", JSON.stringify(res_data.data));
+      console.log(res_data);
+
       navigate("/todo");
+      toast.success("Logged In Successfully");
     } else {
       toast.error("wrong credentials", {
         duration: 4000,
       });
+      const res_data = await response.json();
+      console.log(res_data);
     }
   };
 

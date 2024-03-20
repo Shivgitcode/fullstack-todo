@@ -6,11 +6,11 @@ import { useEffect } from "react";
 export const AppContext = createContext();
 
 export default function AppProviderData({ children }) {
-  const [isAuth, setIsAuth] = useState("");
-  const token = Cookies.get("jwt");
+  const [isAuth, setIsAuth] = useState(JSON.parse(localStorage.getItem("jwt")));
+  console.log(isAuth);
   useEffect(() => {
-    setIsAuth(token);
-  });
+    setIsAuth(JSON.parse(localStorage.getItem("jwt")));
+  }, [isAuth]);
 
   const value = {
     isAuth,
