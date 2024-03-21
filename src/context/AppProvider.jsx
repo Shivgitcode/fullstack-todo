@@ -8,9 +8,11 @@ export const AppContext = createContext();
 export default function AppProviderData({ children }) {
   const [isAuth, setIsAuth] = useState(JSON.parse(localStorage.getItem("jwt")));
   console.log(isAuth);
-  useEffect(() => {
-    setIsAuth(JSON.parse(localStorage.getItem("jwt")));
-  }, [isAuth]);
+
+  // useEffect(() => {
+  //   setIsAuth(JSON.parse(localStorage.getItem("jwt")));
+  //   console.log(isAuth);
+  // }, [isAuth]);
 
   const value = {
     isAuth,

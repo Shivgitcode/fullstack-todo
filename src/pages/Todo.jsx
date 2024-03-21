@@ -59,6 +59,10 @@ export default function Todo() {
       setTodo((prev) => {
         return { ...prev, todoName: "" };
       });
+    } else {
+      toast.error("some internal server error occurred", {
+        duration,
+      });
     }
   };
   useEffect(() => {
@@ -74,6 +78,7 @@ export default function Todo() {
       console.log(response);
       if (response.ok) {
         const res_data = await response.json();
+        console.log(res_data);
         setAllTodos(res_data.data);
       } else {
         const res_data = await response.json();
@@ -96,6 +101,7 @@ export default function Todo() {
     if (response.ok) {
       const res_data = await response.json();
       console.log(res_data);
+      setTodo([]);
     }
   };
   return (

@@ -37,8 +37,8 @@ export default function Login() {
       localStorage.setItem("jwt", JSON.stringify(res_data.data));
       console.log(res_data);
 
-      navigate("/todo");
       toast.success("Logged In Successfully");
+      navigate("/todo");
     } else {
       toast.error("wrong credentials", {
         duration: 4000,
