@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 export default function Login() {
   const [authUser, setAuthUser] = useState({ username: "", password: "" });
   const [showPassword, setShowPassword] = useState(true);
+  const {setIsAuth}=useContext(AppContext)
 
   const navigate = useNavigate();
   const handleForm = (e) => {
@@ -36,6 +37,7 @@ export default function Login() {
       const res_data = await response.json();
       localStorage.setItem("jwt", JSON.stringify(res_data.data));
       console.log(res_data);
+      setIsAuth(JSON.parse(localStorage.getItem("jwt")))
 
       toast.success("Logged In Successfully");
       navigate("/todo");

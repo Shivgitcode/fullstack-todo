@@ -19,14 +19,18 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect } from "react";
+import { useContext } from "react";
+import { AppContext } from "../context/AppProvider";
 
 export default function Todo() {
   const navigate = useNavigate();
   const [todo, setTodo] = useState({ todoName: "", isDone: false });
   const [allTodos, setAllTodos] = useState([]);
+  const { setIsAuth } = useContext(AppContext);
   const handleLogout = async () => {
     localStorage.clear();
     console.log("done");
+    setIsAuth(JSON.parse(localStorage.getItem("jwt")));
     navigate("/login");
 
     toast.success("logged out successfully");
@@ -65,6 +69,7 @@ export default function Todo() {
       });
     }
   };
+
   useEffect(() => {
     const fetchTodos = async () => {
       const response = await fetch("http://localhost:4000/todo", {
@@ -89,6 +94,14 @@ export default function Todo() {
   }, [todo]);
 
   const deleteTodo = async (id) => {
+    setAllTodos((prev) => {
+      return prev.filter((el) => {
+        if (el._id !== id) {
+          return el;
+        }
+      });
+    });
+
     const response = await fetch(`http://localhost:4000/todo/${id}`, {
       method: "DELETE",
       credentials: "include",
@@ -101,7 +114,6 @@ export default function Todo() {
     if (response.ok) {
       const res_data = await response.json();
       console.log(res_data);
-      setTodo([]);
     }
   };
   return (

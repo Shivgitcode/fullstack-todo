@@ -16,6 +16,7 @@ export default function AppProviderData({ children }) {
 
   const value = {
     isAuth,
+    setIsAuth,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
