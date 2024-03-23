@@ -36,7 +36,7 @@ export default function Todo() {
     toast.success("logged out successfully");
   };
 
-  const handleTodo = (e) => {
+  const handleTodo = async (e) => {
     setTodo((prev) => {
       return {
         ...prev,
@@ -44,8 +44,26 @@ export default function Todo() {
           e.target.name === "isDone" ? e.target.checked : e.target.value,
       };
     });
-    console.log(todo);
+    console.log("inside handleTodo", todo);
+
+    // const response = await fetch(`http://localhost:4000/todo/${id}`, {
+    //   method: "Post",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   credentials: "include",
+    //   mode: "cors",
+    //   body: JSON.stringify(),
+    // });
+
+    // if(response.ok){
+    //   toast.success("todo updated")
+
+    // }
+    // else{
+    //   toast.error("some error occured")
   };
+
   const addTodo = async () => {
     const response = await fetch("http://localhost:4000/todo", {
       method: "POST",
@@ -152,9 +170,8 @@ export default function Todo() {
               return (
                 <ListItem
                   key={el._id}
-                  onClick={() => deleteTodo(el._id)}
                   secondaryAction={
-                    <IconButton edge="end">
+                    <IconButton edge="end" onClick={() => deleteTodo(el._id)}>
                       <DeleteIcon sx={{ fill: "white" }}></DeleteIcon>
                     </IconButton>
                   }
@@ -162,12 +179,12 @@ export default function Todo() {
                   <ListItemButton>
                     <ListItemIcon>
                       <Checkbox
-                        key={0}
+                        key={el._id}
                         edge="start"
                         checked={el.isDone}
                         onChange={handleTodo}
                         name="isDone"
-                        disableRipple
+                        disableRipple={true}
                       ></Checkbox>
                     </ListItemIcon>
                     <ListItemText
