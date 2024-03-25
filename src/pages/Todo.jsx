@@ -27,6 +27,7 @@ export default function Todo() {
   const [todo, setTodo] = useState({ todoName: "" });
   const [allTodos, setAllTodos] = useState([]);
   const { setIsAuth } = useContext(AppContext);
+  const [bool, setBool] = useState(false);
   const handleLogout = async () => {
     localStorage.clear();
     console.log("done");
@@ -43,7 +44,7 @@ export default function Todo() {
         [e.target.name]: e.target.value,
       };
     });
-    console.log("inside handleTodo", todo);
+    // console.log("inside handleTodo", todo);
 
     // const response = await fetch(`http://localhost:4000/todo/${id}`, {
     //   method: "Post",
@@ -62,19 +63,44 @@ export default function Todo() {
     // else{
     //   toast.error("some error occured")
   };
+  // console.log(checkTodos);
 
   const handleCheck = async (id) => {
     // console.log(allTodos);
     setAllTodos((prev) => {
       return prev.map((el) => {
         if (el._id === id) {
-          return { ...el, isDone: true };
+          // console.log("inside if", el);
+          setBool(!bool);
+          return { ...el, isDone: bool };
         } else {
+          // console.log("inside else", el);
           return { ...el, isDone: false };
         }
       });
     });
-    console.log("inside handleCheck", allTodos);
+
+    const foundTodo = allTodos.find((el) => el._id === id);
+    console.log("found todo", foundTodo);
+    const response = await fetch(`http://localhost:4000/todo/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      mode: "cors",
+      body: JSON.stringify(foundTodo),
+    });
+
+    if (response.ok) {
+      const res_data = await response.json();
+      console.log("inside handlecheck", res_data);
+      toast.success("todo updated");
+    } else {
+      toast.error("some error occured");
+    }
+
+    // console.log("inside handleCheck", allTodos[0]);
   };
 
   const addTodo = async () => {
@@ -87,10 +113,12 @@ export default function Todo() {
       mode: "cors",
       body: JSON.stringify(todo),
     });
-    console.log(response);
+    // console.log(response);
+    // todos.push(todo);
+    // console.log("todos", todos);
     if (response.ok) {
       const res_data = await response.json();
-      console.log(res_data);
+      // console.log(res_data);
       setTodo((prev) => {
         return { ...prev, todoName: "" };
       });
@@ -111,7 +139,7 @@ export default function Todo() {
           "Content-Type": "application/json",
         },
       });
-      console.log(response);
+      // console.log(response);
       if (response.ok) {
         const res_data = await response.json();
         console.log("this is response data", res_data);
@@ -141,10 +169,10 @@ export default function Todo() {
         "Content-Type": "application/json",
       },
     });
-    console.log(response);
+    // console.log(response);
     if (response.ok) {
       const res_data = await response.json();
-      console.log(res_data);
+      // console.log(res_data);
     }
   };
   return (
@@ -194,7 +222,7 @@ export default function Todo() {
                       <Checkbox
                         key={el._id}
                         edge="start"
-                        checked={todo.isDone}
+                        checked={el.isDone}
                         onChange={() => handleCheck(el._id)}
                         name="isDone"
                         disableRipple={true}
