@@ -24,7 +24,7 @@ import { AppContext } from "../context/AppProvider";
 
 export default function Todo() {
   const navigate = useNavigate();
-  const [todo, setTodo] = useState({ todoName: "", isDone: false });
+  const [todo, setTodo] = useState({ todoName: "" });
   const [allTodos, setAllTodos] = useState([]);
   const { setIsAuth } = useContext(AppContext);
   const handleLogout = async () => {
@@ -40,8 +40,7 @@ export default function Todo() {
     setTodo((prev) => {
       return {
         ...prev,
-        [e.target.name]:
-          e.target.name === "isDone" ? e.target.checked : e.target.value,
+        [e.target.name]: e.target.value,
       };
     });
     console.log("inside handleTodo", todo);
@@ -62,6 +61,20 @@ export default function Todo() {
     // }
     // else{
     //   toast.error("some error occured")
+  };
+
+  const handleCheck = async (id) => {
+    // console.log(allTodos);
+    setAllTodos((prev) => {
+      return prev.map((el) => {
+        if (el._id === id) {
+          return { ...el, isDone: true };
+        } else {
+          return { ...el, isDone: false };
+        }
+      });
+    });
+    console.log("inside handleCheck", allTodos);
   };
 
   const addTodo = async () => {
@@ -101,7 +114,7 @@ export default function Todo() {
       console.log(response);
       if (response.ok) {
         const res_data = await response.json();
-        console.log(res_data);
+        console.log("this is response data", res_data);
         setAllTodos(res_data.data);
       } else {
         const res_data = await response.json();
@@ -181,8 +194,8 @@ export default function Todo() {
                       <Checkbox
                         key={el._id}
                         edge="start"
-                        checked={el.isDone}
-                        onChange={handleTodo}
+                        checked={todo.isDone}
+                        onChange={() => handleCheck(el._id)}
                         name="isDone"
                         disableRipple={true}
                       ></Checkbox>
