@@ -28,6 +28,7 @@ export default function Todo() {
   const [allTodos, setAllTodos] = useState([]);
   const { setIsAuth } = useContext(AppContext);
   const [bool, setBool] = useState(false);
+  // var bool = false;
   const handleLogout = async () => {
     localStorage.clear();
     console.log("done");
@@ -71,11 +72,13 @@ export default function Todo() {
       return prev.map((el) => {
         if (el._id === id) {
           // console.log("inside if", el);
+
           setBool(!bool);
+
           return { ...el, isDone: bool };
         } else {
           // console.log("inside else", el);
-          return { ...el, isDone: false };
+          return { ...el };
         }
       });
     });
