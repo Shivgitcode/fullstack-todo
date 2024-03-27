@@ -27,8 +27,7 @@ export default function Todo() {
   const [todo, setTodo] = useState({ todoName: "" });
   const [allTodos, setAllTodos] = useState([]);
   const { setIsAuth } = useContext(AppContext);
-  const [bool, setBool] = useState(false);
-  // var bool = false;
+
   const handleLogout = async () => {
     localStorage.clear();
     console.log("done");
@@ -71,19 +70,13 @@ export default function Todo() {
     setAllTodos((prev) => {
       return prev.map((el) => {
         if (el._id === id) {
-          // console.log("inside if", el);
-
-          setBool(!bool);
-
-          return { ...el, isDone: bool };
+          return { ...el, isDone: !el.isDone };
         } else {
-          // console.log("inside else", el);
           return { ...el };
         }
       });
     });
 
-    const foundTodo = allTodos.find((el) => el._id === id);
     console.log("found todo", foundTodo);
     const response = await fetch(`http://localhost:4000/todo/${id}`, {
       method: "PUT",
